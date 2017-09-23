@@ -54,17 +54,7 @@ class Content extends Component {
         firebase.database().ref().update(user)
     }
 
-    handleSignout = () => {
-        const vm = this;
-        vm.setState({
-            user: null,
-            type: null
-        });
-        localStorage.setItem('type', null);
-        firebase.auth().signOut().then(function () {
-            alert('You have been signed out');
-        });
-    }
+
 
     render() {
         return (

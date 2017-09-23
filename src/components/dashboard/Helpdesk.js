@@ -16,7 +16,7 @@ class Helpdesk extends Component {
         /* Fetch all tickets and check which tickets have
             an assigned tech
          */
-        fetch(apiurl + '/api/tickets')
+        fetch(apiurl + '/list')
             .then((response) => response.json())
             .then((responseJson) => {
                 const pendingTickets = [];
@@ -115,7 +115,9 @@ class Helpdesk extends Component {
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
+                                <th>Subject</th>
+                                <th>Priority</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -123,7 +125,9 @@ class Helpdesk extends Component {
                             {tickets.map((ticket, i) => (
                                 <tr key={i}>
                                     <td>{ticket.id}</td>
-                                    <td>{ticket.title}</td>
+                                    <td>{ticket.subject}</td>
+                                    <td>{ticket.subject}</td>
+                                    <td>{ticket.subject}</td>
                                     <td>
                                         <Button bsStyle={vm.state.selectedTicket !== null && vm.state.selectedTicket.id === ticket.id ? 'success' : 'info'} onClick={() => vm.ticketDetailsClick(ticket)}>More Details</Button>
                                     </td>

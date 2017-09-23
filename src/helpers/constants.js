@@ -1,3 +1,3 @@
-const apiurl = 'http://localhost/week9/public';
+const apiurl = 'http://localhost/WDA/TicketRaisingSystem/public/api/ticketCRUD';
 
 export { apiurl };

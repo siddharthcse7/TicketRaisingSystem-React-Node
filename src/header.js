@@ -2,29 +2,38 @@ import React, { Component } from 'react';
 //import logo from './logo.svg';
 import './App.css';
 import {Nav, Navbar, NavDropdown, NavItem} from 'react-bootstrap';
+import firebase from 'firebase';
 import { MenuItem } from 'react-bootstrap';
 
 class Header extends Component {
+
+    handleSignout = () => {
+        const vm = this;
+        vm.setState({
+            user: null,
+            type: null
+        });
+        localStorage.setItem('type', null);
+        firebase.auth().signOut().then(function () {
+            alert('You have been signed out');
+        });
+    }
+
+
   render() {
     return (
-      <Navbar>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="#">ITS</a>
-      </Navbar.Brand>
-    </Navbar.Header>
-    <Nav className="headerList">
-      <NavItem eventKey={1} href="#">Link</NavItem>
-      <NavItem eventKey={2} href="#">Link</NavItem>
-      <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-        <MenuItem eventKey={3.1}>Action</MenuItem>
-        <MenuItem eventKey={3.2}>Another action</MenuItem>
-        <MenuItem eventKey={3.3}>Something else here</MenuItem>
-        <MenuItem divider />
-        <MenuItem eventKey={3.4}>Separated link</MenuItem>
-      </NavDropdown>
-    </Nav>
-  </Navbar>
+        <Navbar inverse>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="#">Ticket System</a>
+            </Navbar.Brand>
+          </Navbar.Header>
+          <Nav pullRight>
+              {this.props.userKey !== null &&
+              <NavItem onClick={this.handleSignout}>Sign out</NavItem>
+              }
+          </Nav>
+        </Navbar>
     );
   }
 }
