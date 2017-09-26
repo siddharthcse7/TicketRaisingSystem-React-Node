@@ -21,7 +21,7 @@ class Helpdesk extends Component {
             .then((responseJson) => {
                 const pendingTickets = [];
                 for(const ele in responseJson) {
-                    firebase.database().ref('ticket/'+responseJson[ele].id).on('value', (snapshot) => {
+                    firebase.database().ref('ticket/'+responseJson[ele].ticketId).on('value', (snapshot) => {
                         if(snapshot.val() === null) {
                             pendingTickets.push(responseJson[ele]);
 
@@ -124,10 +124,10 @@ class Helpdesk extends Component {
                             <tbody>
                             {tickets.map((ticket, i) => (
                                 <tr key={i}>
-                                    <td>{ticket.id}</td>
+                                    <td>{ticket.ticketId}</td>
                                     <td>{ticket.subject}</td>
-                                    <td>{ticket.subject}</td>
-                                    <td>{ticket.subject}</td>
+                                    <td>{ticket.priority}</td>
+                                    <td>{ticket.status}</td>
                                     <td>
                                         <Button bsStyle={vm.state.selectedTicket !== null && vm.state.selectedTicket.id === ticket.id ? 'success' : 'info'} onClick={() => vm.ticketDetailsClick(ticket)}>More Details</Button>
                                     </td>
@@ -141,8 +141,8 @@ class Helpdesk extends Component {
                         <Jumbotron style={{padding: 10}}>
                             <Button block bsStyle="danger" onClick={this.closeDialogClick}>Close Dialog</Button>
                             <h3 className="text-uppercase">Ticket Details</h3>
-                            <p><b>ID: </b>{selectedTicket.id}</p>
-                            <p><b>Title: </b><br/>{selectedTicket.title}</p>
+                            <p><b>ID: </b>{selectedTicket.ticketId}</p>
+                            <p><b>Subject: </b><br/>{selectedTicket.subject}</p>
                             <p><b>Comment: </b><br/>{selectedTicket.comment}</p>
                             {techUsers.length > 0 && (
                                 <div>

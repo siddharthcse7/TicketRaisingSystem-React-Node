@@ -76,6 +76,7 @@ class Content extends Component {
                                         <Button bsSize="large" bsStyle="success" onClick={() => this.handleClick('tech')}>Tech User</Button>
                                     </div>
                                 </Jumbotron>
+
                             )
                             : (
                                 <Redirect to="/dashboard" />
