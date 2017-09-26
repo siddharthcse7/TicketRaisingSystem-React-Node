@@ -8,7 +8,8 @@ class Helpdesk extends Component {
         tickets: [],
         selectedTicket: null,
         techUsers: [],
-        selectedTech: null
+        selectedTech: null,
+        priority:null
     }
 
     /* Once component has mounted, fetch from API + firebase */
@@ -56,6 +57,11 @@ class Helpdesk extends Component {
         })
     }
 
+    fetchTickets = () => {
+
+    }
+
+
     /* Toggle the ticket dialog */
     ticketDetailsClick = (ticket) => {
         const { selectedTicket } = this.state;
@@ -77,7 +83,44 @@ class Helpdesk extends Component {
             selectedTech: e.target.value
         });
     }
+    /*
+    * Update selected priority from dropdown
+    * */
+    handlePriorityChange = (e) => {
+        this.setState({
+            priority: e.target.value
+        });
+    }
 
+    /*Click update priority*/
+    updatePriority=()=>{
+        fetch(apiurl+"/"+this.state.selectedTicket.ticketId+"/update", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                emailId: this.state.selectedTicket.emailId,
+                subject:this.state.selectedTicket.subject,
+                priority:this.state.priority,
+                serviceArea: this.state.selectedTicket.serviceArea,
+                preferredContact:this.state.selectedTicket.preferredContact,
+                operatingSystem:this.state.selectedTicket.operatingSystem,
+                description:this.state.selectedTicket.description,
+                status:this.state.selectedTicket.status
+            })
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.response_status === "SUCCESS") {
+                    alert("Successfully updated product!")
+                    this.forceUpdate();
+                } else {
+                    alert("Could not update product.")
+                }
+            })
+    }
     /* Click assign button */
     assignTicketToTech = () => {
         if(this.state.selectedTech === null) {
@@ -144,7 +187,22 @@ class Helpdesk extends Component {
                             <p><b>ID: </b>{selectedTicket.ticketId}</p>
                             <p><b>Subject: </b><br/>{selectedTicket.subject}</p>
                             <p><b>Comment: </b><br/>{selectedTicket.comment}</p>
+                            <div>
+                                <hr/>
+                                <h3 className="text-uppercase">Priority</h3>
+                                <select className="form-control" onChange={this.handlePriorityChange} defaultValue="-1">
+                                    <option value="-1" defaultValue disabled>Select a priority</option>
+                                    <option value ="H">High</option>
+                                    <option value ="M">Moderate</option>
+                                    <option value ="L">Low</option>
+                                </select>
+
+                                <div className="clearfix"><br/>
+                                    <Button className="pull-right" bsStyle="success" onClick={this.updatePriority}>Update Priority</Button>
+                                </div>
+                            </div>
                             {techUsers.length > 0 && (
+
                                 <div>
                                     <hr/>
                                     <h3 className="text-uppercase">Assign to tech</h3>
@@ -159,8 +217,10 @@ class Helpdesk extends Component {
                                         <Button className="pull-right" bsStyle="success" onClick={this.assignTicketToTech}>Assign</Button>
                                     </div>
                                 </div>
+
                                 )
                             }
+
                         </Jumbotron>
                     </Col>
                     )}
