@@ -39,3 +39,9 @@
   color:white;
   text-align: center;
 }
+
+#mainBody {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  min-height: 350px;
+}

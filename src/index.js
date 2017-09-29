@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter} from "react-router-dom";
-
+import Comments from './Comments';
 import firebase from 'firebase'
 
 // THIS SHOULD BE YOUR SETTING FROM FIREBASE
@@ -21,8 +21,10 @@ const config = {
 
 firebase.initializeApp(config);
 
-ReactDOM.render(<BrowserRouter>
-    <App />
+ReactDOM.render(
+    <BrowserRouter>
+        <App/>
+
 </BrowserRouter>, document.getElementById('root'));
 
 registerServiceWorker();

@@ -5,7 +5,7 @@ import firebase from 'firebase';
 import { Route, Redirect } from 'react-router';
 import Dashboard from './components/Dashboard';
 import logo from './logo.svg';
-
+import Login from './components/Login'
 class Content extends Component {
     state = {
         type: null,
@@ -64,18 +64,7 @@ class Content extends Component {
                 <div className="container">
                     <Route exact path="/" render={() => (
                         this.state.user === null ? (
-                                <Jumbotron className="text-center">
-                                    <img src={logo} className="App-logo" alt="logo" style={{width:200}} />
-                                    <h1>Sign in to continue</h1>
-                                    <p>
-                                        Please select your account type:
-                                    </p>
-
-                                    <div className="text-center">
-                                        <Button bsSize="large" bsStyle="primary" style={{marginRight:10}} onClick={() => this.handleClick('helpdesk')}>Helpdesk User</Button>
-                                        <Button bsSize="large" bsStyle="success" onClick={() => this.handleClick('tech')}>Tech User</Button>
-                                    </div>
-                                </Jumbotron>
+                                <Login handleClick={this.handleClick}/>
 
                             )
                             : (
