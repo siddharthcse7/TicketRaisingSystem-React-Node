@@ -9,7 +9,8 @@ class Helpdesk extends Component {
         selectedTicket: null,
         techUsers: [],
         selectedTech: null,
-        priority:null
+        priority:null,
+        level:null
     }
 
     /* Once component has mounted, fetch from API + firebase */
@@ -66,7 +67,7 @@ class Helpdesk extends Component {
     ticketDetailsClick = (ticket) => {
         const { selectedTicket } = this.state;
         this.setState({
-            selectedTicket: (selectedTicket !== null && selectedTicket.id === ticket.id ? null : ticket)
+            selectedTicket: (selectedTicket !== null && selectedTicket.ticketId === ticket.ticketId ? null : ticket)
         });
     }
 
@@ -83,6 +84,14 @@ class Helpdesk extends Component {
             selectedTech: e.target.value
         });
     }
+
+    /* Update the selected level from dropdown box */
+    handleLevelChange = (e) => {
+        this.setState({
+            level: e.target.value
+        });
+    }
+
     /*
     * Update selected priority from dropdown
     * */
@@ -114,10 +123,10 @@ class Helpdesk extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 if (responseJson.response_status === "SUCCESS") {
-                    alert("Successfully updated product!")
+                    alert("Priority updated successfully!")
                     this.forceUpdate();
                 } else {
-                    alert("Could not update product.")
+                    alert("Could not update priority.")
                 }
             })
     }
@@ -129,9 +138,10 @@ class Helpdesk extends Component {
 
         /* Add assigned ticket+tech into database*/
         const data = {};
-        data['ticket/' + this.state.selectedTicket.id] = {
-            ticket_id: this.state.selectedTicket.id,
-            user_id: this.state.selectedTech // stored Tech ID
+        data['ticket/' + this.state.selectedTicket.ticketId] = {
+            ticket_id: this.state.selectedTicket.ticketId,
+            user_id: this.state.selectedTech, // stored Tech ID
+            escalation_level: this.state.level
         };
         firebase.database().ref().update(data)
         alert('Tech successfully assigned to ticket!');
@@ -172,7 +182,7 @@ class Helpdesk extends Component {
                                     <td>{ticket.priority}</td>
                                     <td>{ticket.status}</td>
                                     <td>
-                                        <Button bsStyle={vm.state.selectedTicket !== null && vm.state.selectedTicket.id === ticket.id ? 'success' : 'info'} onClick={() => vm.ticketDetailsClick(ticket)}>More Details</Button>
+                                        <Button bsStyle={vm.state.selectedTicket !== null && vm.state.selectedTicket.ticketId === ticket.ticketId ? 'success' : 'info'} onClick={() => vm.ticketDetailsClick(ticket)}>More Details</Button>
                                     </td>
                                 </tr>
                             ))}
@@ -203,6 +213,20 @@ class Helpdesk extends Component {
                             </div>
                             {techUsers.length > 0 && (
 
+                            <div>
+                                <div>
+                                    <hr/>
+                                    <h3 className="text-uppercase">Escalation level</h3>
+                                    <select className="form-control" onChange={this.handleLevelChange} defaultValue="-1">
+                                        <option value="-1" defaultValue disabled>Select a level</option>
+                                        <option value ="1">1</option>
+                                        <option value ="2">2</option>
+                                        <option value ="3">3</option>
+                                    </select>
+
+                                </div>
+
+
                                 <div>
                                     <hr/>
                                     <h3 className="text-uppercase">Assign to tech</h3>
@@ -217,7 +241,7 @@ class Helpdesk extends Component {
                                         <Button className="pull-right" bsStyle="success" onClick={this.assignTicketToTech}>Assign</Button>
                                     </div>
                                 </div>
-
+                            </div>
                                 )
                             }
 

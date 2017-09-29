@@ -21,7 +21,7 @@ class Dashboard extends Component {
                                     <Helpdesk />
                                 )
                                 : this.props.type === 'tech' ? (
-                                    <Tech />
+                                    <Tech user ={this.props.user}/>
                                 )
                                 :null}
                         </Col>
