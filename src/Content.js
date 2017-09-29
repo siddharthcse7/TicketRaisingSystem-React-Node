@@ -65,7 +65,6 @@ class Content extends Component {
                     <Route exact path="/" render={() => (
                         this.state.user === null ? (
                                 <Login handleClick={this.handleClick}/>
-
                             )
                             : (
                                 <Redirect to="/dashboard" />
