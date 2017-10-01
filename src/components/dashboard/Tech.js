@@ -71,10 +71,11 @@ class Tech extends Component {
                     tickets.length < 1 ? (
                     <div className="alert alert-info">You have not been assigned any tickets.</div>
                     )
-                    : tickets.map((ticket, i) => (
+                    :
 
                     <Table striped hover>
                     <thead>
+
                     <tr>
                     <th>ID</th>
                     <th>Subject</th>
@@ -96,7 +97,7 @@ class Tech extends Component {
                         </tr>
                     ))}
                     </tbody>
-                    </Table>)))}
+                    </Table>)}
 
 
                 {this.state.selectedTicket !== null && (

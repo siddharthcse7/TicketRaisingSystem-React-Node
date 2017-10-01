@@ -32,7 +32,7 @@ class Helpdesk extends Component {
                         }
                     })
                 }
-                
+
                 return pendingTickets;
             })
             .then((tickets) => {

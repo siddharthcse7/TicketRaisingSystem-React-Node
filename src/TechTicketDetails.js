@@ -21,7 +21,7 @@ class TechTicketDetails extends Component{
 
 
     componentDidMount() {
-        fetch(apiurl_comment + '/list')
+        fetch(apiurl_comment +'/'+this.props.selectedTick.ticketId+ '/comments')
             .then((response) => response.json())
             .then((responseJson) => {
                 const myComments = [];
