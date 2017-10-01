@@ -76,6 +76,7 @@ class Tech extends Component {
                     <Table striped hover>
                     <thead>
 
+                    
                     <tr>
                     <th>ID</th>
                     <th>Subject</th>
