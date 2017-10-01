@@ -109,8 +109,13 @@ class TechTicketDetails extends Component{
             .then((responseJson) => {
                 if (responseJson.response_status === "SUCCESS") {
                     alert("Comment added successfully!")
+                    this.state.comments.push({
+                        description:this.state.commentDescription,
+                        ticketId:this.props.selectedTick.ticketId,
+                        emailId:this.props.selectedTick.emailId
+
+                    });
                     this.forceUpdate();
-                    this.state.comments.push(this.state.commentDescription);
                 } else {
                     alert("Could not update status.")
                 }
@@ -182,7 +187,7 @@ render(){
 
                             <div key={i} className="panel panel-danger">
                                 <div className="panel-heading">
-                                    <h3 className="panel-title">{comment.commentId}</h3>
+                                    <h3 className="panel-title">@{this.props.selectedTick.emailId}</h3>
                                 </div>
                                 <div className="panel-body">
                                     {comment.description}
