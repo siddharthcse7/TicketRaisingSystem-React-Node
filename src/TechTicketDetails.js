@@ -9,7 +9,8 @@ class TechTicketDetails extends Component{
 
         this.state = {
             comments: [],
-            status:null
+            status:null,
+            commentDescription: null
 
         };
     }
@@ -45,6 +46,14 @@ class TechTicketDetails extends Component{
         });
     }
 
+    updateCommentDescription=(e)=>{
+        console.log(e.target.value)
+        this.setState({
+            commentDescription: e.target.value
+        });
+
+    }
+
     /*Click update status*/
     updateStatus=()=>{
         fetch(apiurl+"/"+this.props.selectedTick.ticketId+"/update", {
@@ -74,6 +83,40 @@ class TechTicketDetails extends Component{
                 }
             })
     }
+
+
+    postComment=()=>{
+        const x = JSON.stringify({
+            commentId: "1",
+            description:this.state.commentDescription
+        })
+        console.log(x)
+        fetch(apiurl_comment, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                commentId: "1",
+                description:this.state.commentDescription,
+                ticketId:this.props.selectedTick.ticketId,
+                emailId:this.props.selectedTick.emailId
+
+            })
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.response_status === "SUCCESS") {
+                    alert("Comment added successfully!")
+                    this.forceUpdate();
+                    this.state.comments.push(this.state.commentDescription);
+                } else {
+                    alert("Could not update status.")
+                }
+            })
+    }
+
 render(){
         return(
             <div id="mainBody">
@@ -122,9 +165,9 @@ render(){
                             <div style={{marginTop:10 }}>
                             <label htmlFor="textArea" className="col-lg-2 control-label">Comment:</label>
                                 <div className="col-lg-7">
-                                    <textarea className="form-control" rows="3" id="commentTextArea"></textarea>
+                                    <textarea className="form-control" rows="3" id="commentTextArea" onChange={this.updateCommentDescription} ></textarea>
                                 </div>
-                                <Button className="btn btn-info"  >Post Comment</Button>
+                                <Button className="btn btn-info" onClick={this.postComment} >Post Comment</Button>
                             </div>
                         </div><br/>
 

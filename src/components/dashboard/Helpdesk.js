@@ -200,7 +200,7 @@ class Helpdesk extends Component {
                             <div>
                                 <hr/>
                                 <h3 className="text-uppercase">Priority</h3>
-                                <select className="form-control" onChange={this.handlePriorityChange} defaultValue="-1">
+                                <select className="form-control" onChange={this.handlePriorityChange} defaultValue={selectedTicket.priority}>
                                     <option value="-1" defaultValue disabled>Select a priority</option>
                                     <option value ="H">High</option>
                                     <option value ="M">Moderate</option>
