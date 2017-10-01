@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
 import { apiurl } from "../../helpers/constants";
 import firebase from 'firebase';
-import {Button, Panel, Table} from 'react-bootstrap';
+import {Button, Col, Panel, Table} from 'react-bootstrap';
+import TechTicketDetails from "../../TechTicketDetails";
 
 class Tech extends Component {
     state = {
         tickets: [],
+
         selectedTicket: null
+    }
+
+    viewButtonClickMethod = () => {
+
+
+        this.setState({
+            selectedTicket: null
+        })
+
+
     }
 
     /* Toggle the ticket dialog */
@@ -49,45 +61,57 @@ class Tech extends Component {
         const { tickets } = this.state;
         return (
             <div>
-                <h1>My Tickets</h1>
-                {tickets.length < 1 ? (
+                {this.state.selectedTicket == null && (
+                    <h1>My Tickets</h1>
+                )}
+
+
+                {this.state.selectedTicket == null && (
+
+                    tickets.length < 1 ? (
                     <div className="alert alert-info">You have not been assigned any tickets.</div>
-                )
-                : tickets.map((ticket, i) => (
+                    )
+                    : tickets.map((ticket, i) => (
 
                     <Table striped hover>
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Subject</th>
-                            <th>Priority</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                    <thead>
+                    <tr>
+                    <th>ID</th>
+                    <th>Subject</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {tickets.map((ticket, i) => (
+                        <tr key={i}>
+                            <td>{ticket.ticketId}</td>
+                            <td>{ticket.subject}</td>
+                            <td>{ticket.priority}</td>
+                            <td>{ticket.status}</td>
+                            <td>
+                                <Button bsStyle={this.state.selectedTicket !== null && this.state.selectedTicket.ticketId === ticket.ticketId ? 'success' : 'info'} onClick={() => this.ticketDetailsClick(ticket)} >View</Button>
+                            </td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        {tickets.map((ticket, i) => (
-                            <tr key={i}>
-                                <td>{ticket.ticketId}</td>
-                                <td>{ticket.subject}</td>
-                                <td>{ticket.priority}</td>
-                                <td>{ticket.status}</td>
-                                <td>
-                                    <Button bsStyle={this.state.selectedTicket !== null && this.state.selectedTicket.ticketId === ticket.ticketId ? 'success' : 'info'} onClick={() => this.ticketDetailsClick(ticket)} >View</Button>
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </Table>
+                    ))}
+                    </tbody>
+                    </Table>)))}
 
-                    /*    <Panel key={i} header={ticket.subject}  >
+
+                {this.state.selectedTicket !== null && (
+                    <TechTicketDetails viewClick={this.viewButtonClickMethod} selectedTick={this.state.selectedTicket} />
+                ) }
+
+
+                {/*    <Panel key={i} header={ticket.subject}  >
                             <p>Description: {ticket.description}</p>
                             <p>Status: {ticket.status}</p>
                             <p>ID: {ticket.ticketId}</p>
                             <p>{ticket.comment}</p>
 
-                     </Panel>*/
-                ))}
+                     </Panel>*/}
+
             </div>
         );
     }

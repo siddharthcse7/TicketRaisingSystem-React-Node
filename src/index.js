@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter} from "react-router-dom";
-import Comments from './Comments';
 import firebase from 'firebase'
 
 // THIS SHOULD BE YOUR SETTING FROM FIREBASE
