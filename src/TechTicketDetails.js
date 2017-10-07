@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import {Button, Collapse, Fade, Panel,Well} from 'react-bootstrap';
 import {apiurl_comment, apiurl} from "./helpers/constants";
+import { EditorState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { convertToRaw } from 'draft-js';
+
 
 
 class TechTicketDetails extends Component{
@@ -10,7 +15,8 @@ class TechTicketDetails extends Component{
         this.state = {
             comments: [],
             status:null,
-            commentDescription: null
+            commentDescription: null,
+            editorState: EditorState.createEmpty(),
 
         };
     }
@@ -46,13 +52,19 @@ class TechTicketDetails extends Component{
         });
     }
 
-    updateCommentDescription=(e)=>{
+    updateCommentDescription = (editorState) => {
+        this.setState({
+            editorState,
+        });
+    };
+
+    /*updateCommentDescription=(e)=>{
         console.log(e.target.value)
         this.setState({
             commentDescription: e.target.value
         });
 
-    }
+    }*/
 
     /*Click update status*/
     updateStatus=()=>{
@@ -86,9 +98,12 @@ class TechTicketDetails extends Component{
 
 
     postComment=()=>{
+        console.log(convertToRaw(this.state.editorState.getCurrentContent()));
         const x = JSON.stringify({
             commentId: "1",
-            description:this.state.commentDescription
+            description: this.state.editorState,
+            ticketId:this.props.selectedTick.ticketId,
+            emailId:this.props.selectedTick.emailId
         })
         console.log(x)
         fetch(apiurl_comment, {
@@ -99,7 +114,7 @@ class TechTicketDetails extends Component{
             },
             body: JSON.stringify({
                 commentId: "1",
-                description:this.state.commentDescription,
+                description:this.state.editorState,
                 ticketId:this.props.selectedTick.ticketId,
                 emailId:this.props.selectedTick.emailId
 
@@ -110,7 +125,7 @@ class TechTicketDetails extends Component{
                 if (responseJson.response_status === "SUCCESS") {
                     alert("Comment added successfully!")
                     this.state.comments.push({
-                        description:this.state.commentDescription,
+                        description:this.state.editorState,
                         ticketId:this.props.selectedTick.ticketId,
                         emailId:this.props.selectedTick.emailId
 
@@ -123,7 +138,9 @@ class TechTicketDetails extends Component{
     }
 
 render(){
+    const { editorState } = this.state;
         return(
+
             <div id="mainBody">
                 <Button onClick={this.updateSelectedTicketState} >Back</Button>
                 <legend>View Ticket #{this.props.selectedTick.ticketId}</legend>
@@ -170,7 +187,14 @@ render(){
                             <div style={{marginTop:10 }}>
                             <label htmlFor="textArea" className="col-lg-2 control-label">Comment:</label>
                                 <div className="col-lg-7">
-                                    <textarea className="form-control" rows="3" id="commentTextArea" onChange={this.updateCommentDescription} ></textarea>
+                                    {/*        <textarea className="form-control" rows="3" id="commentTextArea" onChange={this.updateCommentDescription} ></textarea>*/}
+                                    <Editor
+                                        editorState={editorState}
+                                        toolbarClassName="toolbarClassName"
+                                        wrapperClassName="wrapperClassName"
+                                        editorClassName="editorClassName"
+                                        onEditorStateChange={this.updateCommentDescription}
+                                    />
                                 </div>
                                 <Button className="btn btn-info" onClick={this.postComment} >Post Comment</Button>
                             </div>

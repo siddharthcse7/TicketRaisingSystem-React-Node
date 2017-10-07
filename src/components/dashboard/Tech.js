@@ -57,6 +57,21 @@ class Tech extends Component {
             })
     }
 
+    escalateTicketClick = (ticket) => {
+
+        /* escalate the ticket*/
+        const data = {};
+        data['ticket/' + ticket.ticketId] = {
+            ticket_id: ticket.ticketId,
+            user_id: null, // unassigning the ticket from the tech user.
+            escalation_level: ticket.level,
+            escalated_by: this.props.user.displayName
+        };
+        firebase.database().ref().update(data)
+        alert('Ticket escalated successfully!');
+        window.location.reload();
+    }
+
     render () {
         const { tickets } = this.state;
         return (
@@ -76,7 +91,7 @@ class Tech extends Component {
                     <Table striped hover>
                     <thead>
 
-                    
+
                     <tr>
                     <th>ID</th>
                     <th>Subject</th>
@@ -94,6 +109,7 @@ class Tech extends Component {
                             <td>{ticket.status}</td>
                             <td>
                                 <Button bsStyle={this.state.selectedTicket !== null && this.state.selectedTicket.ticketId === ticket.ticketId ? 'success' : 'info'} onClick={() => this.ticketDetailsClick(ticket)} >View</Button>
+                                <Button bsStyle= 'danger' onClick={() => this.escalateTicketClick(ticket)} >Escalate</Button>
                             </td>
                         </tr>
                     ))}
