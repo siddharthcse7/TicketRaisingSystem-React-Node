@@ -63,8 +63,7 @@ class Tech extends Component {
         const data = {};
         data['ticket/' + ticket.ticketId] = {
             ticket_id: ticket.ticketId,
-            user_id: null, // unassigning the ticket from the tech user.
-            escalation_level: ticket.level,
+            /*escalation_level: ticket.level,*/
             escalated_by: this.props.user.displayName
         };
         firebase.database().ref().update(data)
