@@ -96,16 +96,21 @@ class TechTicketDetails extends Component{
             })
     }
 
+    getFullComment=()=>{
+        console.log(this.state.editorState.getCurrentContent())
+        var rawContent = convertToRaw(this.state.editorState.getCurrentContent());
+        var contentBlock = rawContent.blocks;
+        var fullComment="";
+        contentBlock.forEach((block)=>{
+            fullComment+=block.text+" ";
+        });
+        return fullComment;
+    }
 
     postComment=()=>{
-        console.log(convertToRaw(this.state.editorState.getCurrentContent()));
-        const x = JSON.stringify({
-            commentId: "1",
-            description: this.state.editorState,
-            ticketId:this.props.selectedTick.ticketId,
-            emailId:this.props.selectedTick.emailId
-        })
-        console.log(x)
+
+       var fullComment= this.getFullComment();
+
         fetch(apiurl_comment, {
             method: 'POST',
             headers: {
@@ -114,7 +119,7 @@ class TechTicketDetails extends Component{
             },
             body: JSON.stringify({
                 commentId: "1",
-                description:this.state.editorState,
+                description: fullComment,
                 ticketId:this.props.selectedTick.ticketId,
                 emailId:this.props.selectedTick.emailId
 
@@ -125,7 +130,7 @@ class TechTicketDetails extends Component{
                 if (responseJson.response_status === "SUCCESS") {
                     alert("Comment added successfully!")
                     this.state.comments.push({
-                        description:this.state.editorState,
+                        description:fullComment,
                         ticketId:this.props.selectedTick.ticketId,
                         emailId:this.props.selectedTick.emailId
 
