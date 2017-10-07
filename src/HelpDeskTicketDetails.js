@@ -173,7 +173,7 @@ class HelpDeskTicketDetails extends Component{
                                     </select> <br/><br/>
 
                                     <div className="clearfix"><br/>
-                                        <Button className="pull-right" bsStyle="success" onClick={this.assignTicketToTech}>Assign</Button>
+                                        <Button className="pull-right" bsStyle="success" onClick={this.assignTicketToTech}>Assign and escalate</Button>
                                     </div>
                                 </div>
                             </div>
