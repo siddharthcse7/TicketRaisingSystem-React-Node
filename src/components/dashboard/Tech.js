@@ -41,6 +41,7 @@ class Tech extends Component {
                 for(const ele in responseJson) {
                     firebase.database().ref('ticket/'+responseJson[ele].ticketId).on('value', (snapshot) => {
                         if(snapshot.val() !== null && snapshot.val().user_id === this.props.user.uid) {
+                            //responseJson[ele]['level'] = snapshot.val().escalation_level;
                             myTickets.push(responseJson[ele]);
 
                             /* Force the view to re-render (async problem) */
@@ -63,7 +64,8 @@ class Tech extends Component {
         const data = {};
         data['ticket/' + ticket.ticketId] = {
             ticket_id: ticket.ticketId,
-            /*escalation_level: ticket.level,*/
+            user_id: null, // unassigning the ticket from the tech user.
+          //  escalation_level: ticket.level,
             escalated_by: this.props.user.displayName
         };
         firebase.database().ref().update(data)

@@ -150,7 +150,7 @@ render(){
                 <Button onClick={this.updateSelectedTicketState} >Back</Button>
                 <legend>View Ticket #{this.props.selectedTick.ticketId}</legend>
 
-                <div className="panel panel-primary">
+                <div className="panel panel-info disabled">
                     <div className="panel-heading">
                         <h4 className="panel-title">
                             Ticket Details
@@ -189,25 +189,39 @@ render(){
                                 <Button className="btn btn-info" onClick={this.updateStatus} >Update Status</Button>
                             </div>
 
-                            <div style={{marginTop:10 }}>
-                            <label htmlFor="textArea" className="col-lg-2 control-label">Comment:</label>
-                                <div className="col-lg-7">
-                                    {/*        <textarea className="form-control" rows="3" id="commentTextArea" onChange={this.updateCommentDescription} ></textarea>*/}
-                                    <Editor
-                                        editorState={editorState}
-                                        toolbarClassName="toolbarClassName"
-                                        wrapperClassName="wrapperClassName"
-                                        editorClassName="editorClassName"
-                                        onEditorStateChange={this.updateCommentDescription}
-                                    />
-                                </div>
-                                <Button className="btn btn-info" onClick={this.postComment} >Post Comment</Button>
-                            </div>
+
                         </div><br/>
 
                     </div>
 
                 </div>
+                <div className="panel panel-success">
+                    <div className="panel-heading">
+                        <h4 className="panel-title">
+                            Add comment
+
+                        </h4>
+
+                    </div>
+                    <div className="panel-body">
+                        <div style={{marginTop:10 }}>
+
+                            <div className="col-lg-12">
+                                {/*        <textarea className="form-control" rows="3" id="commentTextArea" onChange={this.updateCommentDescription} ></textarea>*/}
+                                <Editor
+                                    editorState={editorState}
+                                    toolbarClassName="toolbarClassName"
+                                    wrapperClassName="wrapperClassName"
+                                    editorClassName="editorClassName"
+                                    onEditorStateChange={this.updateCommentDescription}
+                                />
+                            </div>
+
+                        </div>
+                        <Button className="btn btn-info pull-right" onClick={this.postComment} >Post Comment</Button>
+                    </div>
+                </div>
+
                 {this.state.comments.length < 1 ? (
                     <p className="alert alert-info">There are no comments to display.</p>
                 ):(

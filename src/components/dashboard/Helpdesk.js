@@ -20,7 +20,7 @@ class Helpdesk extends Component {
                 const pendingTickets = [];
                 for(const ele in responseJson) {
                     firebase.database().ref('ticket/'+responseJson[ele].ticketId).on('value', (snapshot) => {
-                        if(snapshot.val() === null) {
+                        if(snapshot.val() === null || snapshot.val().escalated_by != null) {
                             pendingTickets.push(responseJson[ele]);
 
                             /* Force the view to re-render (async problem) */
@@ -39,6 +39,7 @@ class Helpdesk extends Component {
 
 
     }
+
 
     fetchTickets = () => {
 
