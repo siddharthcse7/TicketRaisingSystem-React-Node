@@ -14,7 +14,7 @@ class TechTicketDetails extends Component{
 
         this.state = {
             comments: [],
-            status:null,
+            status: this.props.selectedTick.status,
             commentDescription: null,
             editorState: EditorState.createEmpty(),
 
@@ -68,7 +68,22 @@ class TechTicketDetails extends Component{
 
     /*Click update status*/
     updateStatus=()=>{
+
+        const json = JSON.stringify({
+            emailId: this.props.selectedTick.emailId,
+            subject:this.props.selectedTick.subject,
+            priority:this.props.selectedTick.priority,
+            serviceArea: this.props.selectedTick.serviceArea,
+            preferredContact:this.props.selectedTick.preferredContact,
+            operatingSystem:this.props.selectedTick.operatingSystem,
+            description:this.props.selectedTick.description,
+            status:this.state.status
+        });
+
+        console.log(json);
         fetch(apiurl+"/"+this.props.selectedTick.ticketId+"/update", {
+
+
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -90,6 +105,7 @@ class TechTicketDetails extends Component{
                 if (responseJson.response_status === "SUCCESS") {
                     alert("Status updated successfully!")
                     this.forceUpdate();
+                    //window.location.reload();
                 } else {
                     alert("Could not update status.")
                 }
@@ -108,6 +124,13 @@ class TechTicketDetails extends Component{
     }
 
     postComment=()=>{
+        console.log(JSON.stringify({
+            commentId: "1",
+            description: fullComment,
+            ticketId:this.props.selectedTick.ticketId,
+            emailId:this.props.loggedInUser.email
+
+        }));
 
        var fullComment= this.getFullComment();
 
@@ -121,7 +144,7 @@ class TechTicketDetails extends Component{
                 commentId: "1",
                 description: fullComment,
                 ticketId:this.props.selectedTick.ticketId,
-                emailId:this.props.selectedTick.emailId
+                emailId:this.props.loggedInUser.email
 
             })
         })
@@ -132,9 +155,10 @@ class TechTicketDetails extends Component{
                     this.state.comments.push({
                         description:fullComment,
                         ticketId:this.props.selectedTick.ticketId,
-                        emailId:this.props.selectedTick.emailId
+                        emailId:this.props.loggedInUser.email
 
                     });
+                    this.state.editorState = null;
                     this.forceUpdate();
                 } else {
                     alert("Could not update status.")
@@ -147,7 +171,7 @@ render(){
         return(
 
             <div id="mainBody">
-                <Button onClick={this.updateSelectedTicketState} >Back</Button>
+                <Button className="btn-success" onClick={this.updateSelectedTicketState} >Back</Button>
                 <legend>View Ticket #{this.props.selectedTick.ticketId}</legend>
 
                 <div className="panel panel-info disabled">
@@ -186,7 +210,7 @@ render(){
                                     <option value ="Resolved">Resolved</option>
                                     <option value ="Closed">Closed</option>
                                 </select>
-                                <Button className="btn btn-info" onClick={this.updateStatus} >Update Status</Button>
+                                <Button className="btn btn-infobtn btn-info" onClick={this.updateStatus} >Update Status</Button>
                             </div>
 
 
@@ -230,7 +254,7 @@ render(){
 
                             <div key={i} className="panel panel-danger">
                                 <div className="panel-heading">
-                                    <h3 className="panel-title">@{this.props.selectedTick.emailId}</h3>
+                                    <h3 className="panel-title">Commented By: {comment.emailId}</h3>
                                 </div>
                                 <div className="panel-body">
                                     {comment.description}
@@ -242,12 +266,6 @@ render(){
                     )
 
                 )};
-
-
-
-
-
-
             </div>
         );
     }

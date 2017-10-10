@@ -40,10 +40,6 @@ class Helpdesk extends Component {
 
     }
 
-
-    fetchTickets = () => {
-
-    }
     viewButtonClickMethod = () => {
 
 
@@ -62,11 +58,6 @@ class Helpdesk extends Component {
         });
     }
 
-
-    /* Render the page! */
-    /* TODO : Complete in your own time:
-        Do you think you could split this page into separate sub-components?
-     */
     render () {
         const vm = this
         const { selectedTicket, tickets } = this.state
@@ -78,6 +69,8 @@ class Helpdesk extends Component {
                     tickets.length < 1 ?(
                         <p className="alert alert-info">There are no tickets to display.</p>
                     ):
+
+                        /*If tickets are available to display*/
                     <Row>
                     <Col md={12}>
                     <h1>Pending Tickets</h1>
@@ -86,7 +79,7 @@ class Helpdesk extends Component {
                     <tr>
                     <th>ID</th>
                     <th>Subject</th>
-                    <th>Priority</th>
+                    {/*<th>Priority</th>*/}
                     <th>Status</th>
                     <th>Actions</th>
                     </tr>
@@ -96,9 +89,10 @@ class Helpdesk extends Component {
                         <tr key={i}>
                             <td>{ticket.ticketId}</td>
                             <td>{ticket.subject}</td>
-                            <td>{ticket.priority}</td>
+                       {/*     <td>{ticket.priority}</td>*/}
                             <td>{ticket.status}</td>
                             <td>
+                                {/*Button to show complete details of the ticket.*/}
                                 <Button bsStyle={vm.state.selectedTicket !== null && vm.state.selectedTicket.ticketId === ticket.ticketId ? 'success' : 'info'} onClick={() => vm.ticketDetailsClick(ticket)}>More Details</Button>
                             </td>
                         </tr>
@@ -107,6 +101,7 @@ class Helpdesk extends Component {
                     </Table>
                     </Col>
                     </Row>)}
+                    {/*Routing to display selected ticket details*/}
                 {selectedTicket !== null && (
 
                     <HelpDeskTicketDetails viewClick={this.viewButtonClickMethod} selectedTick={vm.state.selectedTicket}/>

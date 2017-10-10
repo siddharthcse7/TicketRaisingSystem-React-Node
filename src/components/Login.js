@@ -19,7 +19,9 @@ class Login extends React.Component{
                 </p>
 
                 <div className="text-center">
+                    {/*Button to log into Help desk panel*/}
                     <Button bsSize="large" bsStyle="primary" style={{marginRight:10}} onClick={() => this.handleClick('helpdesk')}>Helpdesk User</Button>
+                    {/*Button to log into Tech panel*/}
                     <Button bsSize="large" bsStyle="success" onClick={() => this.handleClick('tech')}>Tech User</Button>
                 </div>
             </Jumbotron>

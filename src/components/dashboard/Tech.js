@@ -13,7 +13,7 @@ class Tech extends Component {
 
     viewButtonClickMethod = () => {
 
-
+        this.fetchTickets();
         this.setState({
             selectedTicket: null
         })
@@ -30,7 +30,7 @@ class Tech extends Component {
     }
 
 
-    componentDidMount() {
+    fetchTickets=()=>{
         /* Fetch all tickets and check which tickets have
             been assigned to this tech user
          */
@@ -57,6 +57,9 @@ class Tech extends Component {
                 });
             })
     }
+    componentDidMount() {
+        this.fetchTickets();
+    }
 
     escalateTicketClick = (ticket) => {
 
@@ -77,18 +80,19 @@ class Tech extends Component {
         const { tickets } = this.state;
         return (
             <div>
+                {/*if no ticket is selected*/}
                 {this.state.selectedTicket == null && (
                     <h1>My Tickets</h1>
                 )}
 
-
+                {/*If there are no tickets assigned*/}
                 {this.state.selectedTicket == null && (
 
                     tickets.length < 1 ? (
                     <div className="alert alert-info">You have not been assigned any tickets.</div>
                     )
                     :
-
+                    /*If there are tickets to display*/
                     <Table striped hover>
                     <thead>
 
@@ -102,6 +106,7 @@ class Tech extends Component {
                     </tr>
                     </thead>
                     <tbody>
+                    {/*Looping through tickets to display*/}
                     {tickets.map((ticket, i) => (
                         <tr key={i}>
                             <td>{ticket.ticketId}</td>
@@ -109,7 +114,9 @@ class Tech extends Component {
                             <td>{ticket.priority}</td>
                             <td>{ticket.status}</td>
                             <td>
+                                {/*View ticket details button*/}
                                 <Button bsStyle={this.state.selectedTicket !== null && this.state.selectedTicket.ticketId === ticket.ticketId ? 'success' : 'info'} onClick={() => this.ticketDetailsClick(ticket)} >View</Button>
+                                {/*Escalate ticket to help desk user button*/}
                                 <Button bsStyle= 'danger' onClick={() => this.escalateTicketClick(ticket)} >Escalate</Button>
                             </td>
                         </tr>
@@ -119,7 +126,7 @@ class Tech extends Component {
 
 
                 {this.state.selectedTicket !== null && (
-                    <TechTicketDetails viewClick={this.viewButtonClickMethod} selectedTick={this.state.selectedTicket} />
+                    <TechTicketDetails viewClick={this.viewButtonClickMethod} selectedTick={this.state.selectedTicket} loggedInUser={this.props.user} />
                 ) }
 
 

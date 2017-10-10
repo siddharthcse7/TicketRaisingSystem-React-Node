@@ -32,6 +32,7 @@ export default class Home extends React.Component {
 
 
                 <div>
+                    {/*Logout button*/}
                     <RaisedButton
                         backgroundColor="#a4c639"
                         labelColor="#ffffff"
