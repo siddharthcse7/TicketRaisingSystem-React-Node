@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
 import './App.css';
 import {Nav, Navbar, NavDropdown, NavItem} from 'react-bootstrap';
 import firebase from 'firebase';
-import { MenuItem } from 'react-bootstrap';
+
 
 class Header extends Component {
 
@@ -29,6 +28,7 @@ class Header extends Component {
             </Navbar.Brand>
           </Navbar.Header>
           <Nav pullRight>
+              {/*Show signout option if user is logged in*/}
               {this.props.userKey !== null &&
               <NavItem onClick={this.handleSignout}>Sign out</NavItem>
               }

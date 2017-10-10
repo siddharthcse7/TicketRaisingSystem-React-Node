@@ -3,7 +3,6 @@ import './App.css';
 import { Navbar, Button, Nav, NavItem, Jumbotron } from 'react-bootstrap';
 import firebase from 'firebase';
 import { Route, Redirect } from 'react-router';
-
 import logo from './logo.svg';
 import Content from "./Content";
 import Header from "./header";
@@ -60,19 +59,6 @@ class App extends Component {
         };
         firebase.database().ref().update(user)
     }
-
-    handleSignout = () => {
-        const vm = this;
-        vm.setState({
-            user: null,
-            type: null
-        });
-        localStorage.setItem('type', null);
-        firebase.auth().signOut().then(function () {
-            alert('You have been signed out');
-        });
-    }
-
 
     render() {
         return (

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Helpdesk from './dashboard/Helpdesk';
 import Tech from './dashboard/Tech';
-import { Row, Grid, Col, Jumbotron } from 'react-bootstrap';
+import { Row    , Grid, Col, Jumbotron } from 'react-bootstrap';
 
 class Dashboard extends Component {
     render () {
@@ -20,6 +20,7 @@ class Dashboard extends Component {
                         <Col md={9}>
                             {/*Routing user based on its type*/}
                             {this.props.type === 'helpdesk' ? (
+                                   /*If user type is helpdesk opening Help Desk component*/
                                     <Helpdesk />
                                 )
                                 : this.props.type === 'tech' ? (

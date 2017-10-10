@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { apiurl } from '../../helpers/constants';
-import { Table, Row, Col, Jumbotron, Button } from 'react-bootstrap';
+import { Table, Row, Col, Button } from 'react-bootstrap';
 import firebase from 'firebase';
 import HelpDeskTicketDetails from "../../HelpDeskTicketDetails";
 class Helpdesk extends Component {
@@ -40,9 +40,8 @@ class Helpdesk extends Component {
 
     }
 
+    //Based on the state of selectedTicket rendering the view
     viewButtonClickMethod = () => {
-
-
         this.setState({
             selectedTicket: null
         })
@@ -79,7 +78,6 @@ class Helpdesk extends Component {
                     <tr>
                     <th>ID</th>
                     <th>Subject</th>
-                    {/*<th>Priority</th>*/}
                     <th>Status</th>
                     <th>Actions</th>
                     </tr>
@@ -89,7 +87,6 @@ class Helpdesk extends Component {
                         <tr key={i}>
                             <td>{ticket.ticketId}</td>
                             <td>{ticket.subject}</td>
-                       {/*     <td>{ticket.priority}</td>*/}
                             <td>{ticket.status}</td>
                             <td>
                                 {/*Button to show complete details of the ticket.*/}
@@ -103,9 +100,7 @@ class Helpdesk extends Component {
                     </Row>)}
                     {/*Routing to display selected ticket details*/}
                 {selectedTicket !== null && (
-
                     <HelpDeskTicketDetails viewClick={this.viewButtonClickMethod} selectedTick={vm.state.selectedTicket}/>
-
                 )}
 
             </div>

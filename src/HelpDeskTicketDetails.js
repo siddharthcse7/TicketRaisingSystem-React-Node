@@ -112,6 +112,9 @@ class HelpDeskTicketDetails extends Component{
         window.location.reload();
     }
 
+    updateSelectedTicketState = () => {
+        this.props.viewClick();
+    }
 
     render() {
         const {techUsers} = this.state
@@ -119,6 +122,7 @@ class HelpDeskTicketDetails extends Component{
         return (
 
             <div>
+                <Button className="btn-success pull-right" onClick={this.updateSelectedTicketState} >Back</Button>
                 <legend>View Ticket #{this.props.selectedTick.ticketId}</legend>
                 <div className="panel panel-primary">
                     <div className="panel-heading">
@@ -135,6 +139,7 @@ class HelpDeskTicketDetails extends Component{
                         <div>
 
                             <label className="col-lg-2 control-label"><b>Priority</b></label>
+                        {/*Handling priority change*/}
                             <select className="col-lg-10" onChange={this.handlePriorityChange} defaultValue={this.props.selectedTick.priority}>
                                 <option value="-1" defaultValue disabled>Select a priority</option>
                                 <option value ="H">High</option>
@@ -146,12 +151,14 @@ class HelpDeskTicketDetails extends Component{
                                 <Button className="pull-right" bsStyle="success" onClick={this.updatePriority}>Update Priority</Button>
                             </div>
                         </div>
+
                         {techUsers.length > 0 && (
 
                             <div>
                                 <div>
 
                                     <label className="col-lg-2 control-label"><b>Escalation level</b></label>
+                                    {/* Handling escalation level change*/}
                                     <select className="col-lg-10" onChange={this.handleLevelChange} defaultValue="-1">
                                         <option value="-1" defaultValue disabled>Select a level</option>
                                         <option value ="1">1</option>
@@ -165,6 +172,7 @@ class HelpDeskTicketDetails extends Component{
                                 <div>
 
                                     <label className="col-lg-2 control-label"><b>Assign to tech</b></label>
+                                    {/*Displaying all Tech users.*/}
                                     <select className="col-lg-10" onChange={this.handleTechChange} defaultValue="-1">
                                         <option value="-1" defaultValue disabled>Select a tech user</option>
                                         {techUsers.map((user, i) => (
@@ -173,6 +181,7 @@ class HelpDeskTicketDetails extends Component{
                                     </select> <br/><br/>
 
                                     <div className="clearfix"><br/>
+                                        {/*Assigning ticket to a technical user.*/}
                                         <Button className="pull-right" bsStyle="success" onClick={this.assignTicketToTech}>Assign and escalate</Button>
                                     </div>
                                 </div>

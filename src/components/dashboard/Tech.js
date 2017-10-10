@@ -7,7 +7,6 @@ import TechTicketDetails from "../../TechTicketDetails";
 class Tech extends Component {
     state = {
         tickets: [],
-
         selectedTicket: null
     }
 
@@ -41,7 +40,6 @@ class Tech extends Component {
                 for(const ele in responseJson) {
                     firebase.database().ref('ticket/'+responseJson[ele].ticketId).on('value', (snapshot) => {
                         if(snapshot.val() !== null && snapshot.val().user_id === this.props.user.uid) {
-                            //responseJson[ele]['level'] = snapshot.val().escalation_level;
                             myTickets.push(responseJson[ele]);
 
                             /* Force the view to re-render (async problem) */
@@ -57,6 +55,7 @@ class Tech extends Component {
                 });
             })
     }
+    //Fetching tickets when component mounted.
     componentDidMount() {
         this.fetchTickets();
     }
@@ -126,17 +125,9 @@ class Tech extends Component {
 
 
                 {this.state.selectedTicket !== null && (
+                    //Rendering tech ticket details component
                     <TechTicketDetails viewClick={this.viewButtonClickMethod} selectedTick={this.state.selectedTicket} loggedInUser={this.props.user} />
                 ) }
-
-
-                {/*    <Panel key={i} header={ticket.subject}  >
-                            <p>Description: {ticket.description}</p>
-                            <p>Status: {ticket.status}</p>
-                            <p>ID: {ticket.ticketId}</p>
-                            <p>{ticket.comment}</p>
-
-                     </Panel>*/}
 
             </div>
         );
