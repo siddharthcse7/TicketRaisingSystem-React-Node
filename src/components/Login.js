@@ -12,11 +12,9 @@ class Login extends React.Component{
     render(){
         return(
             <Jumbotron className="text-center">
-                <img src={logo} className="App-logo" alt="logo" style={{width:200}} />
-                <h1>Sign in to continue</h1>
-                <p>
-                    Please select your account type:
-                </p>
+               {/* <img src={logo} className="App-logo" alt="logo" style={{width:200}} />*/}
+                <h1>Login</h1>
+
 
                 <div className="text-center">
                     {/*Button to log into Help desk panel*/}
