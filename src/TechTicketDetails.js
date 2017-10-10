@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import {Button, Collapse, Fade, Panel,Well} from 'react-bootstrap';
 import {apiurl_comment, apiurl} from "./helpers/constants";
-import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { convertToRaw } from 'draft-js';
-
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'
 
 
 class TechTicketDetails extends Component{
@@ -16,7 +13,7 @@ class TechTicketDetails extends Component{
             comments: [],
             status: this.props.selectedTick.status,
             commentDescription: null,
-            editorState: EditorState.createEmpty(),
+            newComment: null
 
         };
     }
@@ -52,19 +49,12 @@ class TechTicketDetails extends Component{
         });
     }
 
-    updateCommentDescription = (editorState) => {
+    updateCommentDescription = (value) => {
         this.setState({
-            editorState,
+            newComment:value,
         });
     };
 
-    /*updateCommentDescription=(e)=>{
-        console.log(e.target.value)
-        this.setState({
-            commentDescription: e.target.value
-        });
-
-    }*/
 
     /*Click update status*/
     updateStatus=()=>{
@@ -112,27 +102,18 @@ class TechTicketDetails extends Component{
             })
     }
 
-    getFullComment=()=>{
-        console.log(this.state.editorState.getCurrentContent())
-        var rawContent = convertToRaw(this.state.editorState.getCurrentContent());
-        var contentBlock = rawContent.blocks;
-        var fullComment="";
-        contentBlock.forEach((block)=>{
-            fullComment+=block.text+" ";
-        });
-        return fullComment;
-    }
+
 
     postComment=()=>{
         console.log(JSON.stringify({
             commentId: "1",
-            description: fullComment,
+            description: this.state.newComment,
             ticketId:this.props.selectedTick.ticketId,
             emailId:this.props.loggedInUser.email
 
         }));
 
-       var fullComment= this.getFullComment();
+     //  var fullComment= this.getFullComment();
 
         fetch(apiurl_comment, {
             method: 'POST',
@@ -142,7 +123,7 @@ class TechTicketDetails extends Component{
             },
             body: JSON.stringify({
                 commentId: "1",
-                description: fullComment,
+                description: this.state.newComment,
                 ticketId:this.props.selectedTick.ticketId,
                 emailId:this.props.loggedInUser.email
 
@@ -153,12 +134,12 @@ class TechTicketDetails extends Component{
                 if (responseJson.response_status === "SUCCESS") {
                     alert("Comment added successfully!")
                     this.state.comments.push({
-                        description:fullComment,
+                        description:this.state.newComment,
                         ticketId:this.props.selectedTick.ticketId,
                         emailId:this.props.loggedInUser.email
 
                     });
-                    this.state.editorState = null;
+                    this.state.newComment = null;
                     this.forceUpdate();
                 } else {
                     alert("Could not update status.")
@@ -231,14 +212,9 @@ render(){
                         <div style={{marginTop:10 }}>
 
                             <div className="col-lg-12">
-                                {/*        <textarea className="form-control" rows="3" id="commentTextArea" onChange={this.updateCommentDescription} ></textarea>*/}
-                                <Editor
-                                    editorState={editorState}
-                                    toolbarClassName="toolbarClassName"
-                                    wrapperClassName="wrapperClassName"
-                                    editorClassName="editorClassName"
-                                    onEditorStateChange={this.updateCommentDescription}
-                                />
+                               
+                                <ReactQuill value={this.state.newComment}
+                                            onChange={this.updateCommentDescription} />
                             </div>
 
                         </div>
@@ -256,8 +232,8 @@ render(){
                                 <div className="panel-heading">
                                     <h3 className="panel-title">Commented By: {comment.emailId}</h3>
                                 </div>
-                                <div className="panel-body">
-                                    {comment.description}
+                                <div className="panel-body" dangerouslySetInnerHTML={{ __html: comment.description }}>
+
                                 </div>
                             </div>
                         )
