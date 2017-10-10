@@ -13,8 +13,8 @@ class TechTicketDetails extends Component{
             comments: [],
             status: this.props.selectedTick.status,
             commentDescription: null,
-            newComment: null
-
+            newComment: null,
+            allowCloseTicket:null
         };
     }
 
@@ -47,6 +47,7 @@ class TechTicketDetails extends Component{
         this.setState({
             status: e.target.value
         });
+
     }
 
     updateCommentDescription = (value) => {
@@ -58,22 +59,7 @@ class TechTicketDetails extends Component{
 
     /*Click update status*/
     updateStatus=()=>{
-
-        const json = JSON.stringify({
-            emailId: this.props.selectedTick.emailId,
-            subject:this.props.selectedTick.subject,
-            priority:this.props.selectedTick.priority,
-            serviceArea: this.props.selectedTick.serviceArea,
-            preferredContact:this.props.selectedTick.preferredContact,
-            operatingSystem:this.props.selectedTick.operatingSystem,
-            description:this.props.selectedTick.description,
-            status:this.state.status
-        });
-
-        console.log(json);
         fetch(apiurl+"/"+this.props.selectedTick.ticketId+"/update", {
-
-
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -94,6 +80,11 @@ class TechTicketDetails extends Component{
             .then((responseJson) => {
                 if (responseJson.response_status === "SUCCESS") {
                     alert("Status updated successfully!")
+                    if(this.state.status == "Resolved" ||this.state.status == "Unresolved" || this.state.status == "Closed"){
+                        this.state.allowCloseTicket = true;
+                    }else{
+                        this.state.allowCloseTicket = null;
+                    }
                     this.forceUpdate();
                     //window.location.reload();
                 } else {
@@ -113,7 +104,7 @@ class TechTicketDetails extends Component{
 
         }));
 
-     //  var fullComment= this.getFullComment();
+        //  var fullComment= this.getFullComment();
 
         fetch(apiurl_comment, {
             method: 'POST',
@@ -147,12 +138,45 @@ class TechTicketDetails extends Component{
             })
     }
 
-render(){
-    const { editorState } = this.state;
+    closeTicket = () => {
+
+        fetch(apiurl+"/"+this.props.selectedTick.ticketId+"/update", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                emailId: this.props.selectedTick.emailId,
+                subject:this.props.selectedTick.subject,
+                priority:this.props.selectedTick.priority,
+                serviceArea: this.props.selectedTick.serviceArea,
+                preferredContact:this.props.selectedTick.preferredContact,
+                operatingSystem:this.props.selectedTick.operatingSystem,
+                description:this.props.selectedTick.description,
+                status:"Closed"
+            })
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.response_status === "SUCCESS") {
+                    alert("Status updated successfully!")
+                    this.forceUpdate();
+                    //window.location.reload();
+                } else {
+                    alert("Could not update status.")
+                }
+            })
+    }
+    render(){
+        const { editorState } = this.state;
         return(
 
             <div id="mainBody">
-                <Button className="btn-success" onClick={this.updateSelectedTicketState} >Back</Button>
+                <div className="pull-right">
+                    <Button className="btn-warning" onClick={this.updateSelectedTicketState} >Back</Button>
+                    <Button className="btn-danger" onClick={this.closeTicket} disabled={!this.state.allowCloseTicket}>Close Ticket</Button>
+                </div>
                 <legend>View Ticket #{this.props.selectedTick.ticketId}</legend>
 
                 <div className="panel panel-info disabled">
@@ -164,8 +188,8 @@ render(){
                     <div className="panel-body">
                         <div className="form-group">
                             <div>
-                            <label className="col-lg-2 control-label" >Subject: </label>
-                            <p className="col-lg-10" > {this.props.selectedTick.subject} </p><br/>
+                                <label className="col-lg-2 control-label" >Subject: </label>
+                                <p className="col-lg-10" > {this.props.selectedTick.subject} </p><br/>
                             </div><br/>
                             <div>
                                 <label className="col-lg-2 control-label" >Description: </label>
@@ -186,10 +210,12 @@ render(){
                             </div>
                             <div>
                                 <label className="col-lg-2 control-label" >Status</label>
-                                <select className="col-lg-7"  onChange={this.handleStatusChange} defaultValue={this.props.selectedTick.status}>
+                                <select className="col-lg-7"  onChange={this.handleStatusChange} defaultValue={this.props.selectedTick.status} disabled={this.props.selectedTick.status == 'Closed'}>
+                                    <option value ="Pending">Pending</option>
                                     <option value ="In Progress">In Progress</option>
                                     <option value ="Resolved">Resolved</option>
-                                    <option value ="Closed">Closed</option>
+                                    <option value ="Unresolved">Unresolved</option>
+                                    <option value="Closed" disabled>Closed</option>
                                 </select>
                                 <Button className="btn btn-infobtn btn-info" onClick={this.updateStatus} >Update Status</Button>
                             </div>
@@ -212,7 +238,7 @@ render(){
                         <div style={{marginTop:10 }}>
 
                             <div className="col-lg-12">
-                               
+
                                 <ReactQuill value={this.state.newComment}
                                             onChange={this.updateCommentDescription} />
                             </div>
